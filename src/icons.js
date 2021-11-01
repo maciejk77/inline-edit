@@ -18,7 +18,7 @@ export const FailureIcon = () => (
 export const Spinner = () => (
   <SpinnerRoundFilled
     color="green"
-    secondaryColor="gray"
+    secondarycolor="gray"
     size="25"
     speed="150"
   />

@@ -6,8 +6,8 @@ const useSubmit = () => {
   const [isSuccess, setIsSuccess] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleBlur = async (e) => {
-    const { value } = e.target;
+  const handleInputActions = (evt) => {
+    const { value } = evt.target;
 
     const submitInputValue = async () => {
       setIsLoading(true);
@@ -40,7 +40,15 @@ const useSubmit = () => {
     }
   };
 
-  return { loading, isSuccess, error, handleBlur };
+  const handleKeyDown = async (evt) => {
+    if (evt.key === 'Enter') {
+      handleInputActions(evt);
+    }
+  };
+
+  const handleBlur = async (evt) => handleInputActions(evt);
+
+  return { loading, isSuccess, error, handleKeyDown, handleBlur };
 };
 
 export default useSubmit;

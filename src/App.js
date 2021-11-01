@@ -9,7 +9,7 @@ runServer();
 
 const App = () => {
   const { handleChange, inputValue } = useInput();
-  const { loading, isSuccess, error, handleBlur } = useSubmit();
+  const { loading, isSuccess, error, handleKeyDown, handleBlur } = useSubmit();
   const { fetchData } = useData();
 
   const isShowingError = !loading && error;
@@ -24,6 +24,7 @@ const App = () => {
       <div style={styles.inputRow}>
         <input
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           style={styles.input}
           value={inputValue}
@@ -38,6 +39,7 @@ const App = () => {
   );
 };
 
+// this could be refactored to CSS in JS
 const styles = {
   inputRow: { display: 'flex', alignItems: 'center' },
   input: {
