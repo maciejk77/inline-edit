@@ -4,8 +4,8 @@ import useInput from './useInput';
 const useData = () => {
   const { setInputValue } = useInput();
 
-  const fetchData = () => {
-    fetch(BASE_PATH).then((json) => {
+  const fetchData = async () => {
+    await fetch(BASE_PATH).then((json) => {
       const { text } = JSON.parse(json._bodyInit);
       setInputValue(text);
     });

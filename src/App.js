@@ -4,6 +4,7 @@ import useInput from './hooks/useInput';
 import useSubmit from './hooks/useSubmit';
 import useData from './hooks/useData';
 import { Spinner, SuccessIcon, FailureIcon } from './icons';
+import styles from './styles';
 
 runServer();
 
@@ -37,21 +38,6 @@ const App = () => {
       <div>{isShowingError && <div style={styles.error}>{error}</div>}</div>
     </>
   );
-};
-
-// this could be refactored to CSS in JS
-const styles = {
-  inputRow: { display: 'flex', alignItems: 'center' },
-  input: {
-    border: '2px solid lightgray',
-    outline: 'none',
-    padding: 5,
-  },
-  error: {
-    fontFamily: 'Verdana',
-    fontSize: 10,
-    paddingTop: 5,
-  },
 };
 
 export default App;
