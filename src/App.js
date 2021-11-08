@@ -20,13 +20,14 @@ const App = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef(null);
+  let fetchData;
 
   useEffect(() => {
     loading && fetchData();
   }, [fetchData, loading]);
 
   // === constants ===============
-  let fetchData;
+
   const isShowingError = !loading && error;
   const isShowingSuccess = !loading && isSuccess;
 
