@@ -1,34 +1,38 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { runServer } from './server';
-import useInput from './hooks/useInput';
-import useSubmit from './hooks/useSubmit';
-import useData from './hooks/useData';
 import { Spinner, SuccessIcon, FailureIcon } from './icons';
+import {
+  BASE_PATH,
+  ERROR_MESSAGE,
+  ENTER_KEY,
+  INITIAL_VALUE,
+} from './constants';
+
+import { runServer } from './server';
 import styles from './styles';
 
 runServer();
 
 const App = () => {
-  const { handleChange, inputValue } = useInput();
-  const {
-    loading,
-    isSuccess,
-    error,
-    // handleKeyDown,
-    // handleBlur,
-    handleInputActions,
-  } = useSubmit();
-  const { fetchData } = useData();
-
+  // === hooks ===================
+  const [loading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState(INITIAL_VALUE);
+  const [isSuccess, setIsSuccess] = useState(null);
+  const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const ref = useRef(null);
 
+  useEffect(() => {
+    loading && fetchData();
+  }, [fetchData, loading]);
+
+  // === constants ===============
+  let fetchData;
   const isShowingError = !loading && error;
   const isShowingSuccess = !loading && isSuccess;
 
-  const ref = useRef(null);
-
+  // === handlers ================
   const handleKeyDown = async (evt) => {
-    if (evt.key === 'Enter') {
+    if (evt.key === ENTER_KEY) {
       ref.current.blur();
       handleInputActions(evt);
     }
@@ -40,14 +44,53 @@ const App = () => {
   };
 
   const handleFocus = () => {
-    // console.log('YAYA!');
     setIsEditing(true);
   };
 
-  useEffect(() => {
-    loading && fetchData();
-  }, [fetchData, loading]);
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setInputValue(value);
+  };
 
+  const handleInputActions = (evt) => {
+    const { value } = evt.target;
+
+    const submitInputValue = async () => {
+      setIsLoading(true);
+
+      const response = await fetch(BASE_PATH, {
+        method: 'POST',
+        body: JSON.stringify({ input: value }),
+      });
+
+      const { success } = await response.json();
+      setIsSuccess(success);
+
+      if (success) {
+        setError(false);
+      } else {
+        resetState();
+        setError(ERROR_MESSAGE);
+      }
+      setIsLoading(false);
+    };
+
+    submitInputValue();
+  };
+
+  const resetState = () => {
+    setInputValue(INITIAL_VALUE);
+  };
+
+  // === helpers =================
+  fetchData = async () => {
+    await fetch(BASE_PATH).then((json) => {
+      const { text } = JSON.parse(json._bodyInit);
+      setInputValue(text);
+    });
+  };
+
+  // === render ==================
   return (
     <>
       <div style={styles.inputRow}>
@@ -56,7 +99,7 @@ const App = () => {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
-          style={styles.input}
+          style={isEditing ? styles.input : styles.inputActive}
           value={inputValue}
           ref={ref}
         />

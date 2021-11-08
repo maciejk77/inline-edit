@@ -1,33 +1,29 @@
-import { useState } from 'react';
+// // import { useState } from 'react';
 
-const useInput = () => {
-  const [inputValue, setInputValue] = useState('Hello World');
-  // const [isEditing, setIsEditing] = useState(false);
+// import { useContext } from 'react';
+// import { InputContext } from './contexts/InputContext';
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setInputValue(value);
-  };
+// const useInput = () => {
+//   const { inputValue, setInputValue } = useContext(InputContext);
+//   // const [inputValue, setInputValue] = useState('Hello World');
+//   // const [isEditing, setIsEditing] = useState(false);
 
-  const resetState = () => {
-    console.log('RESET!');
+//   const handleChange = (e) => {
+//     const { value } = e.target;
+//     setInputValue(value);
+//   };
 
-    setInputValue('Hello World');
-    console.log('INPUT VALUE: ', inputValue);
-  };
-  // const handleFocus = () => {
-  //   setIsEditing(true);
-  // };
+//   const resetState = () => {
+//     setInputValue('Hello World');
+//     console.log('INPUT VALUE: ', inputValue);
+//   };
 
-  return {
-    inputValue,
-    setInputValue,
-    handleChange,
-    resetState,
-    // isEditing,
-    // setIsEditing,
-    // handleFocus,
-  };
-};
+//   return {
+//     inputValue,
+//     setInputValue,
+//     handleChange,
+//     resetState,
+//   };
+// };
 
-export default useInput;
+// export default useInput;

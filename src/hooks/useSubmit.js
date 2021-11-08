@@ -1,55 +1,48 @@
-import { useState } from 'react';
-import { BASE_PATH, ERROR_MESSAGE } from '../constants';
-import useInput from './useInput';
+// // import { useState } from 'react';
+// import { BASE_PATH, ERROR_MESSAGE } from '../constants';
+// import useInput from './useInput';
+// import InputContext from './contexts/InputContext';
+// import { useContext } from 'react';
 
-const useSubmit = () => {
-  const [loading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(null);
-  const [error, setError] = useState(null);
+// const useSubmit = () => {
+//   // const [loading, setIsLoading] = useState(false);
+//   // const [isSuccess, setIsSuccess] = useState(null);
+//   // const [error, setError] = useState(null);
+//   const { setIsLoading, setIsSuccess, setError } = useContext(InputContext);
 
-  const { resetState } = useInput();
+//   const { resetState } = useInput();
 
-  const handleInputActions = (evt) => {
-    const { value } = evt.target;
+// const handleInputActions = (evt) => {
+//   const { value } = evt.target;
 
-    const submitInputValue = async () => {
-      setIsLoading(true);
-      const response = await fetch(BASE_PATH, {
-        method: 'POST',
-        body: JSON.stringify({ input: value }),
-      });
+//   const submitInputValue = async () => {
+//     setIsLoading(true);
+//     const response = await fetch(BASE_PATH, {
+//       method: 'POST',
+//       body: JSON.stringify({ input: value }),
+//     });
 
-      const { success } = await response.json();
-      setIsSuccess(success);
+//     const { success } = await response.json();
+//     setIsSuccess(success);
 
-      if (success) {
-        setError(false);
-      } else {
-        resetState();
-        setError(ERROR_MESSAGE);
-      }
-      setIsLoading(false);
-    };
+//     if (success) {
+//       setError(false);
+//     } else {
+//       resetState();
+//       setError(ERROR_MESSAGE);
+//     }
+//     setIsLoading(false);
+//   };
 
-    submitInputValue();
-  };
+//   submitInputValue();
+// };
 
-  // const handleKeyDown = async (evt) => {
-  //   if (evt.key === 'Enter') {
-  //     handleInputActions(evt);
-  //   }
-  // };
+//   return {
+//     loading,
+//     isSuccess,
+//     error,
+//     handleInputActions,
+//   };
+// };
 
-  // const handleBlur = async (evt) => handleInputActions(evt);
-
-  return {
-    loading,
-    isSuccess,
-    error,
-    handleInputActions,
-    // handleKeyDown,
-    // handleBlur,
-  };
-};
-
-export default useSubmit;
+// export default useSubmit;
