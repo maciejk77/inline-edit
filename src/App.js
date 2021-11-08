@@ -9,6 +9,7 @@ import {
 
 import { runServer } from './server';
 import styles from './styles';
+import Input from './components/Input';
 
 runServer();
 
@@ -19,7 +20,7 @@ const App = () => {
   const [isSuccess, setIsSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const ref = useRef(null);
+  const inputRef = useRef(null);
   let fetchData;
 
   useEffect(() => {
@@ -27,14 +28,13 @@ const App = () => {
   }, [fetchData, loading]);
 
   // === constants ===============
-
   const isShowingError = !loading && error;
   const isShowingSuccess = !loading && isSuccess;
 
   // === handlers ================
   const handleKeyDown = async (evt) => {
     if (evt.key === ENTER_KEY) {
-      ref.current.blur();
+      inputRef.current.blur();
       handleInputActions(evt);
     }
   };
@@ -95,14 +95,14 @@ const App = () => {
   return (
     <>
       <div style={styles.inputRow}>
-        <input
+        <Input
           onFocus={handleFocus}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           style={isEditing ? styles.input : styles.inputActive}
           value={inputValue}
-          ref={ref}
+          ref={inputRef}
         />
         <div>{loading && <Spinner />}</div>
         <div>{!isEditing && isShowingSuccess && <SuccessIcon />}</div>
