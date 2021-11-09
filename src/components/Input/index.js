@@ -6,16 +6,20 @@ import {
   ENTER_KEY,
   ERROR_MESSAGE,
 } from '../../constants';
+import styles from './styles';
 
-const Input = ({ style }, ref) => {
+const Input = (props, ref) => {
   const {
     setIsLoading,
     inputValue,
     setInputValue,
     setIsSuccess,
     setError,
+    isEditing,
     setIsEditing,
   } = useContext(InputContext);
+
+  const inputStyle = isEditing ? styles.input : styles.inputActive;
 
   const handleBlur = async (evt) => {
     setIsEditing(false);
@@ -75,7 +79,7 @@ const Input = ({ style }, ref) => {
       onChange={handleChange}
       onFocus={handleFocus}
       onKeyDown={handleKeyDown}
-      style={style}
+      style={inputStyle}
       value={inputValue}
     />
   );

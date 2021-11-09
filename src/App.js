@@ -3,9 +3,11 @@ import { Spinner, SuccessIcon, FailureIcon } from './icons';
 import { BASE_PATH, INITIAL_VALUE } from './constants';
 
 import { runServer } from './server';
-import styles from './styles';
-import Input from './components/Input';
 import InputContext from './contexts/InputContext';
+
+import Input from './components/Input';
+import ErrorMessage from './components/ErrorMessage';
+import styles from './styles';
 
 runServer();
 
@@ -32,8 +34,6 @@ const App = () => {
     });
   };
 
-  const ErrorMessage = () => <div style={styles.error}>{error}</div>;
-
   return (
     <InputContext.Provider
       value={{
@@ -42,20 +42,18 @@ const App = () => {
         setInputValue,
         setIsSuccess,
         setError,
+        isEditing,
         setIsEditing,
       }}
     >
       <div style={styles.inputRow}>
-        <Input
-          style={isEditing ? styles.input : styles.inputActive}
-          ref={inputRef}
-        />
+        <Input ref={inputRef} />
         <>{loading && <Spinner />}</>
         <>{!isEditing && isShowingSuccess && <SuccessIcon />}</>
         <> {!isEditing && isShowingError && <FailureIcon />}</>
       </div>
 
-      <>{!isEditing && isShowingError && <ErrorMessage />}</>
+      <>{!isEditing && isShowingError && <ErrorMessage error={error} />}</>
     </InputContext.Provider>
   );
 };
