@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Spinner, SuccessIcon, FailureIcon } from './icons';
-import {
-  BASE_PATH,
-  ERROR_MESSAGE,
-  ENTER_KEY,
-  INITIAL_VALUE,
-} from './constants';
+import { BASE_PATH, INITIAL_VALUE } from './constants';
 
 import { runServer } from './server';
 import styles from './styles';
 import Input from './components/Input';
+import InputContext from './contexts/InputContext';
 
 runServer();
 
 const App = () => {
-  // === hooks ===================
   const [loading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState(INITIAL_VALUE);
   const [isSuccess, setIsSuccess] = useState(null);
@@ -27,63 +22,9 @@ const App = () => {
     loading && fetchData();
   }, [fetchData, loading]);
 
-  // === constants ===============
   const isShowingError = !loading && error;
   const isShowingSuccess = !loading && isSuccess;
 
-  // === handlers ================
-  const handleKeyDown = async (evt) => {
-    if (evt.key === ENTER_KEY) {
-      inputRef.current.blur();
-      handleInputActions(evt);
-    }
-  };
-
-  const handleBlur = async (evt) => {
-    setIsEditing(false);
-    handleInputActions(evt);
-  };
-
-  const handleFocus = () => {
-    setIsEditing(true);
-  };
-
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setInputValue(value);
-  };
-
-  const handleInputActions = (evt) => {
-    const { value } = evt.target;
-
-    const submitInputValue = async () => {
-      setIsLoading(true);
-
-      const response = await fetch(BASE_PATH, {
-        method: 'POST',
-        body: JSON.stringify({ input: value }),
-      });
-
-      const { success } = await response.json();
-      setIsSuccess(success);
-
-      if (success) {
-        setError(false);
-      } else {
-        resetState();
-        setError(ERROR_MESSAGE);
-      }
-      setIsLoading(false);
-    };
-
-    submitInputValue();
-  };
-
-  const resetState = () => {
-    setInputValue(INITIAL_VALUE);
-  };
-
-  // === helpers =================
   fetchData = async () => {
     await fetch(BASE_PATH).then((json) => {
       const { text } = JSON.parse(json._bodyInit);
@@ -91,30 +32,31 @@ const App = () => {
     });
   };
 
-  // === render ==================
+  const ErrorMessage = () => <div style={styles.error}>{error}</div>;
+
   return (
-    <>
+    <InputContext.Provider
+      value={{
+        setIsLoading,
+        inputValue,
+        setInputValue,
+        setIsSuccess,
+        setError,
+        setIsEditing,
+      }}
+    >
       <div style={styles.inputRow}>
         <Input
-          onFocus={handleFocus}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onBlur={handleBlur}
           style={isEditing ? styles.input : styles.inputActive}
-          value={inputValue}
           ref={inputRef}
         />
-        <div>{loading && <Spinner />}</div>
-        <div>{!isEditing && isShowingSuccess && <SuccessIcon />}</div>
-        <div> {!isEditing && isShowingError && <FailureIcon />}</div>
+        <>{loading && <Spinner />}</>
+        <>{!isEditing && isShowingSuccess && <SuccessIcon />}</>
+        <> {!isEditing && isShowingError && <FailureIcon />}</>
       </div>
 
-      <div>
-        {!isEditing && isShowingError && (
-          <div style={styles.error}>{error}</div>
-        )}
-      </div>
-    </>
+      <>{!isEditing && isShowingError && <ErrorMessage />}</>
+    </InputContext.Provider>
   );
 };
 

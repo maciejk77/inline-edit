@@ -1,3 +1,5 @@
-// import { createContext } from 'react';
+import { createContext } from 'react';
 
-// export const InputContext = createContext();
+const InputContext = createContext();
+
+export default InputContext;
